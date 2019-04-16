@@ -107,10 +107,12 @@ async def train_units(self):
 
     # train whatever you want here based on whatever condition you want.
     
-    if self.units(ZERGLING).amount < 15:
+    if self.units(ZERGLING).amount / c.get_forces(self).amount <= 0.25:
         await train_anything(self,ZERGLING)
-    
-    #await train_anything(self,MUTALISK)
+    if self.units(MUTALISK).amount / c.get_forces(self).amount <= 0.25:
+        await train_anything(self,BANELING)
+    if self.units(ROACH).amount / c.get_forces(self).amount <= 0.5:
+        await train_anything(self,ROACH)    
        
 
    

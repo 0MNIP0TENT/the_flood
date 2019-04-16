@@ -23,7 +23,7 @@ class Zerg(sc2.BotAI):
         await upgrade.research_upgrades(self)
 
     async def spread(self):
-        if self.townhalls.amount < 2 and self.can_afford(HATCHERY):
+        if self.townhalls.amount < 3 and self.can_afford(HATCHERY):
             # if self.townhalls.amount < 2:
             #     await self.expand_now()
             # elif self.supply_used > 80:
@@ -40,5 +40,5 @@ if __name__ == '__main__':
         #Human(Race.Zerg),
         Bot(Race.Zerg, Zerg()),
         #Bot(Race.Protoss, Sentinel()),
-        Computer(Race.Terran,Difficulty.VeryEasy),
-    ], realtime=False)
+        Computer(Race.Terran,Difficulty.Hard),
+    ], realtime=True)

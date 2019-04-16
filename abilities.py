@@ -1,6 +1,7 @@
 from sc2.constants import HATCHERY, QUEEN ,EFFECT_INJECTLARVA, LAIR
 from sc2.ids.ability_id import AbilityId
 
+
 async def lay_eggs(self):
     bases = self.units(HATCHERY) | self.units(LAIR)
     if bases.ready.exists:

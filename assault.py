@@ -4,7 +4,6 @@ Kill_invakers is a good function for defending the base.
 """
 
 import random,common
-from sc2.constants import ZERGMISSILEWEAPONSLEVEL3
 
 # The main file calls this. Do not delete or change
 async def destroy_all(self):
@@ -31,31 +30,18 @@ The code inside already is just an example you can delete.
 """
 async def seek_and_destroy(self):
     # # attack if supply used > 130
-    # if self.supply_used >= 130 and self.known_enemy_units.exists:
-    #     if self.known_enemy_units.not_structure.exists:
-    #         target = self.known_enemy_units.not_structure.closest_to(common.get_forces(self).center)
-    #         #target = self.known_enemy_units.closest_to(common.get_forces(self).center)
-    #         await self.do_actions([unit.attack(target) for unit in common.get_forces(self)])
-        
-    #     elif self.known_enemy_units.exists:
-    #         target = self.known_enemy_units.closest_to(common.get_forces(self).center)
-    #         await self.do_actions([unit.attack(target) for unit in common.get_forces(self)])
-
-    # elif self.supply_used >= 130 and self.known_enemy_units.empty:
-    #     spot = random.choice(self.enemy_start_locations)
-    #     await self.do_actions([unit.attack(spot) for unit in common.get_forces(self).idle])
-    # attack if bases.amount > 3
-    if common.get_bases(self).amount >= 5 or ZERGMISSILEWEAPONSLEVEL3 in self._game_data.upgrades and self.known_enemy_units.exists:
+    if self.supply_used >= 130 and self.known_enemy_units.exists and self.townhalls.amount >= 3:
         if self.known_enemy_units.not_structure.exists:
             target = self.known_enemy_units.not_structure.closest_to(common.get_forces(self).center)
             #target = self.known_enemy_units.closest_to(common.get_forces(self).center)
-            await self.do_actions([unit.attack(target) for unit in common.get_forces(self).idle])
+            await self.do_actions([unit.attack(target) for unit in common.get_forces(self)])
         
         elif self.known_enemy_units.exists:
             target = self.known_enemy_units.closest_to(common.get_forces(self).center)
-            await self.do_actions([unit.attack(target) for unit in common.get_forces(self).idle])
+            await self.do_actions([unit.attack(target) for unit in common.get_forces(self)])
 
-    elif common.get_bases(self).amount > 5 or ZERGMISSILEWEAPONSLEVEL3 in self._game_data.upgrades and self.known_enemy_units.empty:
+    elif self.supply_used >= 130 and self.known_enemy_units.empty and self.townhalls.amount >= 3:
         spot = random.choice(self.enemy_start_locations)
         await self.do_actions([unit.attack(spot) for unit in common.get_forces(self).idle])
 
+  
