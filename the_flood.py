@@ -40,5 +40,5 @@ if __name__ == '__main__':
         #Human(Race.Zerg),
         Bot(Race.Zerg, Zerg()),
         #Bot(Race.Protoss, Sentinel()),
-        Computer(Race.Terran,Difficulty.Hard),
-    ], realtime=True)
+        Computer(Race.Terran,Difficulty.VeryEasy),
+    ], realtime=False)

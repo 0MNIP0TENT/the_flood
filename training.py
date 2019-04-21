@@ -24,36 +24,114 @@ async def train_anything(self,unit):
     DATA ADDED: INFESTOR, ULTRALISK, VIPER LAIR, HIVE?, ZERGLING, ROACH, BANELIN, infestation pit?, HYDRALISK, RAVAGER, LURKERMP
     SWARMHOST, OVERSEER
 
-    NOTE TO SELF: LARVA MAY BE A BETTER REQUIRMENT THEN HATCHERY, THAT MAY FIX WHEN THE EXTRA HATCHERY BUG
-    LURKERS DONT WORK
-    """
-    requirments = {HATCHERY:[DRONE],OVERLORD:[HATCHERY],DRONE:[HATCHERY],OVERSEER:[LAIR,SPAWNINGPOOL],SWARMHOSTMP:[SPAWNINGPOOL,LAIR,INFESTATIONPIT],INFESTOR:[SPAWNINGPOOL,LAIR,INFESTATIONPIT],
-    GREATERSPIRE:[SPIRE,HIVE,LAIR,INFESTATIONPIT,SPAWNINGPOOL],BROODLORD:[GREATERSPIRE,SPIRE,HIVE,LAIR,INFESTATIONPIT,SPAWNINGPOOL],
-    CORRUPTOR:[SPIRE,HIVE,LAIR,INFESTATIONPIT,SPAWNINGPOOL],SPIRE:[HIVE,LAIR,INFESTATIONPIT,SPAWNINGPOOL],MUTALISK:[LAIR,SPAWNINGPOOL,SPIRE],VIPER:
-    [HIVE,LAIR,SPAWNINGPOOL,INFESTATIONPIT],HATCHERY:[DRONE],ULTRALISKCAVERN:[HIVE,LAIR,SPAWNINGPOOL,INFESTATIONPIT],ULTRALISK:[ULTRALISKCAVERN,HIVE,LAIR,SPAWNINGPOOL,
-    INFESTATIONPIT],HYDRALISKDEN:[LAIR,SPAWNINGPOOL],LURKERDENMP:[HYDRALISKDEN,LAIR,SPAWNINGPOOL],LURKERMP:[INFESTATIONPIT,LURKERDENMP,SPAWNINGPOOL,HYDRALISKDEN,LAIR],
-    RAVAGER:[ROACHWARREN,SPAWNINGPOOL],HYDRALISK:[HYDRALISKDEN,LAIR,SPAWNINGPOOL],HIVE:[LAIR,SPAWNINGPOOL,INFESTATIONPIT],INFESTATIONPIT:[SPAWNINGPOOL,LAIR],LAIR:[SPAWNINGPOOL],
-    ZERGLING:[SPAWNINGPOOL],ROACH:[SPAWNINGPOOL,ROACHWARREN],BANELING:[SPAWNINGPOOL,BANELINGNEST]}
-    
-    unit_type = {HATCHERY:'larva',OVERLORD:'larva',DRONE:'larva',OVERSEER:'morph',SWARMHOSTMP:'larva',INFESTOR:'larva',GREATERSPIRE:'morph',BROODLORD:'morph',CORRUPTOR:'larva',SPIRE:'larva',MUTALISK:'larva',
-    VIPER:'larva',HATCHERY:'larva',ULTRALISK:'larva',ULTRALISKCAVERN:'larva',LURKERDENMP:'larva',LURKERMP:'morph',RAVAGER:'morph',ROACHWARREN:'larva',HYDRALISK:'larva',HYDRALISKDEN:'larva',LAIR:'morph',HIVE:'morph',
-    INFESTATIONPIT:'larva',ZERGLING:'larva',ROACH:'larva',BANELING:'morph',BANELINGNEST:'larva',SPAWNINGPOOL:'larva',INFESTATIONPIT:'larva'}
-    
-    morpher = {OVERSEER:OVERLORD,GREATERSPIRE:SPIRE,BROODLORD:CORRUPTOR,LURKERMP:HYDRALISK,RAVAGER:ROACH,HIVE:LAIR,LAIR:HATCHERY,HIVE:LAIR,BANELING:ZERGLING}
-    
-    requirment = {HATCHERY:DRONE,OVERLORD:HATCHERY,DRONE:HATCHERY,OVERSEER:LAIR,SWARMHOSTMP:INFESTATIONPIT,INFESTOR:INFESTATIONPIT,GREATERSPIRE:SPIRE,BROODLORD:GREATERSPIRE,CORRUPTOR:SPIRE,SPIRE:HIVE,MUTALISK:SPIRE,VIPER:HIVE,HATCHERY:DRONE,
-    ULTRALISK:ULTRALISKCAVERN,ULTRALISKCAVERN:HIVE,LURKERMP:LURKERDENMP,LURKERDENMP:LAIR,RAVAGER:ROACHWARREN,HYDRALISK:HYDRALISKDEN,LAIR:SPAWNINGPOOL,HIVE:INFESTATIONPIT,INFESTATIONPIT:LAIR,ZERGLING:SPAWNINGPOOL,
-    ROACH:ROACHWARREN,BANELING:BANELINGNEST}
+    Note to self: LURKERS DONT WORK, if something requires a HIVE DO NOT INCLUDE a LAIR
 
-    # if the requirment has not been built
+    """
+    requirments = {HATCHERY:[DRONE],
+    OVERLORD:[HATCHERY],
+    DRONE:[HATCHERY],
+    OVERSEER:[LAIR,SPAWNINGPOOL],
+    SWARMHOSTMP:[SPAWNINGPOOL,LAIR,INFESTATIONPIT],
+    INFESTOR:[SPAWNINGPOOL,LAIR,INFESTATIONPIT],
+    GREATERSPIRE:[SPIRE,HIVE,INFESTATIONPIT,SPAWNINGPOOL],
+    BROODLORD:[GREATERSPIRE,SPIRE,HIVE,INFESTATIONPIT,SPAWNINGPOOL],
+    CORRUPTOR:[SPIRE,HIVE,INFESTATIONPIT,SPAWNINGPOOL],
+    SPIRE:[HIVE,INFESTATIONPIT,SPAWNINGPOOL],
+    MUTALISK:[LAIR,SPAWNINGPOOL,SPIRE],
+    VIPER:[HIVE,SPAWNINGPOOL,INFESTATIONPIT],
+    HATCHERY:[DRONE],
+    ULTRALISKCAVERN:[HIVE,SPAWNINGPOOL,INFESTATIONPIT],
+    ULTRALISK:[ULTRALISKCAVERN,HIVE,SPAWNINGPOOL,INFESTATIONPIT],
+    HYDRALISKDEN:[LAIR,SPAWNINGPOOL],
+    LURKERDENMP:[HYDRALISKDEN,LAIR,SPAWNINGPOOL],
+    LURKERMP:[INFESTATIONPIT,LURKERDENMP,SPAWNINGPOOL,HYDRALISKDEN,LAIR],
+    RAVAGER:[ROACHWARREN,SPAWNINGPOOL],
+    HYDRALISK:[HYDRALISKDEN,LAIR,SPAWNINGPOOL],
+    HIVE:[LAIR,SPAWNINGPOOL,INFESTATIONPIT],
+    INFESTATIONPIT:[SPAWNINGPOOL,LAIR],
+    LAIR:[SPAWNINGPOOL],
+    ZERGLING:[SPAWNINGPOOL],
+    ROACH:[SPAWNINGPOOL,ROACHWARREN],
+    BANELING:[SPAWNINGPOOL,BANELINGNEST]}
+    
+    unit_type = {HATCHERY:'larva',
+    OVERLORD:'larva',
+    DRONE:'larva',
+    OVERSEER:'morph',
+    SWARMHOSTMP:'larva',
+    INFESTOR:'larva',
+    GREATERSPIRE:'morph',
+    BROODLORD:'morph',
+    CORRUPTOR:'larva',
+    SPIRE:'larva',
+    MUTALISK:'larva',
+    VIPER:'larva',
+    HATCHERY:'larva',
+    ULTRALISK:'larva',
+    ULTRALISKCAVERN:'larva',
+    LURKERDENMP:'larva',
+    LURKERMP:'morph',
+    RAVAGER:'morph',
+    ROACHWARREN:'larva',
+    HYDRALISK:'larva',
+    HYDRALISKDEN:'larva',
+    LAIR:'morph',HIVE:'morph',
+    INFESTATIONPIT:'larva',
+    ZERGLING:'larva',
+    ROACH:'larva',
+    BANELING:'morph',
+    BANELINGNEST:'larva',
+    SPAWNINGPOOL:'larva',
+    INFESTATIONPIT:'larva'}
+    
+    morpher = {OVERSEER:OVERLORD,
+    GREATERSPIRE:SPIRE,
+    BROODLORD:CORRUPTOR,
+    LURKERMP:HYDRALISK,
+    RAVAGER:ROACH,
+    HIVE:LAIR,
+    LAIR:HATCHERY,
+    HIVE:LAIR,
+    BANELING:ZERGLING}
+    
+    requirment = {HATCHERY:DRONE,
+    OVERLORD:HATCHERY,
+    DRONE:HATCHERY,
+    OVERSEER:LAIR,
+    SWARMHOSTMP:INFESTATIONPIT,
+    INFESTOR:INFESTATIONPIT,
+    GREATERSPIRE:SPIRE,
+    BROODLORD:GREATERSPIRE,
+    CORRUPTOR:SPIRE,
+    SPIRE:HIVE,
+    MUTALISK:SPIRE,
+    VIPER:HIVE,
+    HATCHERY:DRONE,
+    ULTRALISK:ULTRALISKCAVERN,
+    ULTRALISKCAVERN:HIVE,
+    LURKERMP:LURKERDENMP,
+    LURKERDENMP:LAIR,
+    RAVAGER:ROACHWARREN,
+    HYDRALISK:HYDRALISKDEN,
+    LAIR:SPAWNINGPOOL,
+    HIVE:INFESTATIONPIT,
+    INFESTATIONPIT:LAIR,
+    ZERGLING:SPAWNINGPOOL,
+    ROACH:ROACHWARREN,
+    BANELING:BANELINGNEST}
+
+    # if the requirment does not exist
     if self.units(requirment[unit]).empty:   
         # builds the requirments of the requirment
         for req in requirments[unit]:
             # if the req we need to build is morphed from a townhall we have to call the function recursivily with that req as the argument.
-            #print(req)
             if self.units(req).empty and not self.already_pending(req) and unit_type[req] == 'larva':
                 await build.build_requirment(self,req)
             elif self.units(req).empty and not self.already_pending(req) and unit_type[req] == 'morph':
+                if req == LAIR and self.units(LAIR).exists or self.already_pending(LAIR):
+                    continue
+                elif req == HIVE and self.units(HIVE).exists or self.already_pending(HIVE):  
+                    continue
                 await train_anything(self,req)
                      
     # we have to take 2 different actions depending on wether the unit spawns from larva or morphed from another unit
@@ -107,13 +185,16 @@ async def train_units(self):
 
     # train whatever you want here based on whatever condition you want.
     
-    if self.units(ZERGLING).amount / c.get_forces(self).amount <= 0.25:
-        await train_anything(self,ZERGLING)
-    if self.units(MUTALISK).amount / c.get_forces(self).amount <= 0.25:
-        await train_anything(self,BANELING)
-    if self.units(ROACH).amount / c.get_forces(self).amount <= 0.5:
-        await train_anything(self,ROACH)    
-       
+    # if self.units(ZERGLING).amount / c.get_forces(self).amount <= 0.25:
+    #     await train_anything(self,ZERGLING)
+    # if self.units(MUTALISK).amount / c.get_forces(self).amount <= 0.25:
+    #     await train_anything(self,BANELING)
+    # if self.units(ROACH).amount / c.get_forces(self).amount <= 0.5:
+    #     await train_anything(self,ROACH)    
+    await train_anything(self,ULTRALISK)
+    await train_anything(self,VIPER)
+    await train_anything(self,BROODLORD)
+    
 
    
         
