@@ -1,9 +1,10 @@
 from sc2.constants import HATCHERY, QUEEN ,EFFECT_INJECTLARVA, LAIR
 from sc2.ids.ability_id import AbilityId
+from sc2.data import race_townhalls
 
 
 async def lay_eggs(self):
-    bases = self.units(HATCHERY) | self.units(LAIR)
+    bases = self.townhalls
     if bases.ready.exists:
         base = bases.ready.random
         for unit in self.units(QUEEN).idle:
