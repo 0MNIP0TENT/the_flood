@@ -10,12 +10,10 @@ ZERGMELEEWEAPONSLEVEL2,ZERGMELEEWEAPONSLEVEL3,ZERGMISSILEWEAPONSLEVEL1,ZERGMISSI
 ZERGMISSILEWEAPONSLEVEL3,ZERGGROUNDARMORSLEVEL1,ZERGGROUNDARMORSLEVEL2,ZERGGROUNDARMORSLEVEL3,\
 BANELINGNEST,CENTRIFICALHOOKS,ZERGFLYERWEAPONSLEVEL1,ZERGFLYERWEAPONSLEVEL2,ZERGFLYERWEAPONSLEVEL3,\
 ZERGFLYERARMORSLEVEL1,ZERGFLYERARMORSLEVEL2,ZERGFLYERARMORSLEVEL3,SPIRE,BURROW,HATCHERY,GLIALRECONSTITUTION,\
-ROACHWARREN
-
-import common
-import build,training
+ROACHWARREN,TUNNELINGCLAWS
 
 researcher = {
+TUNNELINGCLAWS:ROACHWARREN,
 GLIALRECONSTITUTION:ROACHWARREN,    
 BURROW:HATCHERY,    
 ZERGFLYERWEAPONSLEVEL1:SPIRE,
@@ -38,6 +36,7 @@ ZERGLINGATTACKSPEED:SPAWNINGPOOL,
 ZERGLINGMOVEMENTSPEED:SPAWNINGPOOL
 }
 requirments = {
+TUNNELINGCLAWS:[ROACHWARREN,LAIR,SPAWNINGPOOL],    
 GLIALRECONSTITUTION:[ROACHWARREN,LAIR,SPAWNINGPOOL],    
 BURROW:[HATCHERY],    
 SPIRE:[SPAWNINGPOOL,LAIR],    
@@ -61,6 +60,7 @@ ZERGLINGATTACKSPEED:[SPAWNINGPOOL,HIVE,INFESTATIONPIT],
 ZERGLINGMOVEMENTSPEED:[SPAWNINGPOOL]
 }
 requirment = {
+TUNNELINGCLAWS:LAIR,
 GLIALRECONSTITUTION:LAIR,    
 BURROW:HATCHERY,    
 SPIRE:LAIR,
@@ -111,36 +111,3 @@ ZERGGROUNDARMORSLEVEL1:'UPGRADE',
 ZERGGROUNDARMORSLEVEL2:'UPGRADE',
 ZERGGROUNDARMORSLEVEL3:'UPGRADE',
 }
-async def upgrade_anything(self,upgrade):
-    if self.units(requirment[upgrade]).empty:
-        for req in requirments[upgrade]:
-            
-            if req_type[req] == 'DRONE' and self.units(req).empty:
-                await build.build_requirment(self,req)
-            
-            elif req_type[req] == 'MORPH':
-                if req == LAIR and self.units(LAIR).exists or self.already_pending(LAIR):
-                    continue
-                elif req == HIVE and self.units(HIVE).exists or self.already_pending(HIVE):  
-                    continue
-                await training.train_anything(self,req) 
-              
-            elif req_type[req] == 'UPGRADE':
-                await upgrade_anything(self,req)    
-    else:
-        if self.can_afford(upgrade) and not self.already_pending_upgrade(upgrade) and self.units(researcher[upgrade]).exists:
-            await self.do(self.units(researcher[upgrade]).random.research(upgrade))
-
-"""
-Add your research code here. You can delete the 2 examples if you want.
-"""
-async def research_upgrades(self):
-    pass
-    # await upgrade_anything(self,CENTRIFICALHOOKS)
-    # await upgrade_anything(self,ZERGLINGMOVEMENTSPEED)
-    # await upgrade_anything(self,ZERGLINGATTACKSPEED)
-    await upgrade_anything(self,ZERGFLYERWEAPONSLEVEL3)
-    # await upgrade_anything(self,ZERGMISSILEWEAPONSLEVEL3)
-    # await upgrade_anything(self,ZERGMELEEWEAPONSLEVEL3)
-    # await upgrade_anything(self,GLIALRECONSTITUTION)
-         
