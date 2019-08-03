@@ -5,8 +5,10 @@
 ## Getting python starcraft 2 
 pip sc2 
 
-## In the main.py file there are 4 overridable methods for controlling base expansion, upgrades, training units, and attacking. The base is automatically defended with a methode I wrote called kill_invaders.
+## In the main.py file there are 6 overridable methods for controlling base expansion, upgrades, training units, and attacking. The base is automatically defended with a methode I wrote called kill_invaders.
 
-## exaple.py shows how you should use the main.py file yourself.
+## example.py shows how you should use the main.py file yourself and is a reference.
+
+## To get started you should run the main.py file then add functionality to it.
 
 Interesting abilities may be added in the future.
