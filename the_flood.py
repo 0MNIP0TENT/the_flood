@@ -58,13 +58,6 @@ class Zerg(sc2.BotAI):
                         if err:
                             print(err)    
 
-    async def build_extractor(self):
-        if self.units(EXTRACTOR).amount < self.units(HATCHERY).amount * 2:
-            if self.can_afford(EXTRACTOR) and not self.already_pending(EXTRACTOR):
-                drone = self.workers.random
-                target = self.state.vespene_geyser.closest_to(drone.position)
-                await self.do(drone.build(EXTRACTOR, target)) 
-
 ##### training code
     """
     Contains all code for training units.
@@ -121,22 +114,19 @@ class Zerg(sc2.BotAI):
             # if the unit we need to morph does not exist we recursivily call the functions with the unit we need to morph into arguments 
             elif self.units(training.morpher[unit]).empty and self.can_afford(training.morpher[unit]):
                 await self.train_anything(training.morpher[unit])    
-
-    # This function deals with craeting and distributing workers.
-    async def supply_up(self):
         
-        await self.distribute_workers()
+        # This method controlls distributing workers and creating overlords
+        async def supply_up(self):
+            await self.distribute_workers()
+            await self.build_extractor()
 
-        if self.townhalls.exists and self.units(DRONE).amount < self.townhalls.amount * 18:
-            if self.can_afford(DRONE) and self.get_larva().exists:
-                await self.do(self.get_larva().random.train(DRONE))
+            if self.townhalls.exists and self.units(DRONE).amount < self.townhalls.amount * 16:
+                if self.can_afford(DRONE) and self.get_larva().exists:
+                    await self.do(self.get_larva().random.train(DRONE))
 
-        if self.supply_left < 10 and not self.supply_cap >= 200:
-            if self.can_afford(OVERLORD) and self.get_larva().exists:
-                await self.do(self.get_larva().random.train(OVERLORD))
-
-        await self.build_extractor()        
-
+            if self.supply_left < 10 and not self.supply_cap >= 200:
+                if self.can_afford(OVERLORD) and self.get_larva().exists:
+                    await self.do(self.get_larva().random.train(OVERLORD))
 
     # train queen should stay as it is
     async def train_queen(self):
@@ -156,10 +146,11 @@ class Zerg(sc2.BotAI):
 #### Attack Code
     """
     You will want to modify seek and destroy, in order to determin how and when to attack.
-    Kill_invakers is a good function for defending the base.
+    Kill_invaders is a good function for defending the base.
     """
-
-   # The main file calls this. Do not delete or change
+        
+   # The main file calls this. Do not delete or change, except maybe the radius 
+   # argument in kill invaders.
     async def destroy_all(self):    
         await self.kill_invaders(25.0)
         await self.seek_and_destroy()
@@ -168,16 +159,9 @@ class Zerg(sc2.BotAI):
     async def kill_invaders(self,radius):
         for base in self.get_bases():
             invaders = self.get_enemy_units().closer_than(radius,base)
-            if invaders.exists and self.get_forces().amount >= 2:
-                target = invaders.closest_to(self.get_forces().center)
-                await self.do_actions([unit.attack(target) for unit in self.get_forces()])
-
-    def get_target(self):
-        if self.known_enemy_units.not_structure.exists:
-            return random.choice(self.known_enemy_units.not_structure)
-    
-        elif self.known_enemy_structures.exists:
-            return random.choice(self.known_enemy_structures)
+            if invaders.exists and self.units().exclude_type({OVERLORD, DRONE}).amount >= 2:
+                target = invaders.closest_to(self.units().exclude_type({OVERLORD, DRONE}).center)
+                await self.do_actions([unit.attack(target) for unit in self.units().exclude_type({OVERLORD, DRONE}).idle])
 
     """
     override this in the main file.
@@ -235,14 +219,20 @@ class Zerg(sc2.BotAI):
     
     async def do_abilities(self):
         await self.lay_eggs()               
-       #await self.recover_roaches()     
-    """
-    implement spread in main file to controll base expansions
-    """
+
+    # implement spread in main file to controll base expansions
     async def spread(self):
         pass
 
 #### utility methods
+
+    def get_target(self):
+        if self.known_enemy_units.not_structure.exists:
+            return random.choice(self.known_enemy_units.not_structure)
+    
+        elif self.known_enemy_structures.exists:
+            return random.choice(self.known_enemy_structures)
+
     def get_enemys(self):
         return self.known_enemy_units
 
@@ -263,7 +253,8 @@ class Zerg(sc2.BotAI):
 
     def get_bases(self):
         return self.townhalls
-
+   
+    # You should not need to use this.
     async def morph(self,units,morph):
         if units.exists and self.can_afford(morph):
             await self.do(units.random.train(morph))    
