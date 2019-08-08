@@ -42,6 +42,11 @@ class TheFlood(Zerg):
                 target = self.state.vespene_geyser.closest_to(drone.position)
                 await self.do(drone.build(EXTRACTOR, target)) 
 
+    """
+    These are units you can train with await self.train_anything():
+    BANELING, BROODLORD, CORRUPTOR, INFESTOR, HYDRALISK, LURKERMP MUTALISK,
+    ULTRALISK, RAVAGER, ROACH, VIPER, ZERGLING
+    """
     async def train_units(self):
         # Do not erase supply_up or train_queen
         await self.supply_up()
@@ -49,18 +54,24 @@ class TheFlood(Zerg):
         #if not self.units(ROACHWARREN).ready:
          #   await self.train_anything(ZERGLING)
         
-
-        await self.train_anything(RAVAGER)
+        await self.train_anything(ZERGLING)
+        await self.train_anything(MUTALISK)
 
     """
     Upgrade with the upgrade_anything method in the research upgrades method.
     Example: await self.upgrade_anything(CENTRIFICALHOOKS)
+    
+    ZERGFLYERWEAPONSLEVEL1, ZERGFLYERWEAPONSLEVEL2, ZERGFLYERWEAPONSLEVEL3,
+    ZERGFLYERARMORSLEVEL1, ZERGFLYERARMORSLEVEL2, ZERGFLYERARMORSLEVEL3,
+    ZERGGROUNDARMORSLEVEL1, ZERGGROUNDARMORSLEVEL2, ZERGGROUNDARMORSLEVEL3,
+    ZERGMISSILEWEAPONSLEVEL1, ZERGMISSILEWEAPONSLEVEL2, ZERGMISSILEWEAPONSLEVEL3,
+    ZERGMELEEWEAPONSLEVEL1, ZERGMELEEWEAPONSLEVEL2, ZERGMELEEWEAPONSLEVEL3,
+    ZERGLINGMOVEMENTSPEED, ZERGLINGATTACKSPEED
     """
     async def research_upgrades(self):
-        if self.units(ROACHWARREN).ready:
-            await self.upgrade_anything(ZERGMISSILEWEAPONSLEVEL1)
-            await self.upgrade_anything(ZERGFLYERARMORSLEVEL1)
-    
+       await self.upgrade_anything(ZERGLINGMOVEMENTSPEED)
+       await self.upgrade_anything(ZERGLINGATTACKSPEED) 
+
     async def seek_and_destroy(self):
         if self.supply_used >= 130 and not self.known_enemy_units().empty:
             target = self.known_enemy_units().closest_to(self.get_forces().center)
